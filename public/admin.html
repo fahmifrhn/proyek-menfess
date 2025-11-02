@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Admin Panel Moderasi</h1>
+        </header>
+
+        <section class="form-container admin-controls">
+            <h2>Kontrol</h2>
+            <p>Masukkan kata sandi untuk melakukan aksi hapus.</p>
+            <label for="admin-pass">Kata Sandi Admin:</label>
+            <input type="password" id="admin-pass" placeholder="Password rahasia...">
+            <button id="load-messages-btn">Muat Semua Pesan</button>
+            <p id="admin-status" class="admin-status-msg"></p>
+        </section>
+
+        <section class="feed-container">
+            <h2>Daftar Pesan</h2>
+            <div id="admin-posts-feed">
+                <p>Klik "Muat Semua Pesan" untuk melihat...</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="admin.js" defer></script>
+
+</body>
+</html>

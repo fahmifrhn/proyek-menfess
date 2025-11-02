@@ -1,0 +1,361 @@
+/* Pengaturan Dasar */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px 30px;
+    text-align: center;
+}
+header h1 { margin: 0; font-size: 2em; }
+header p { margin: 5px 0 0; opacity: 0.9; }
+
+/* Penataan Formulir */
+.form-container {
+    padding: 30px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.form-container h2 {
+    margin-top: 0;
+    color: #4a90e2;
+}
+
+/* Style untuk semua input form */
+#confess-form textarea,
+#confess-form select,
+#confess-form input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; /* Penting */
+    margin-bottom: 15px;
+}
+#confess-form label {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Style untuk Opsi Pengirim */
+.sender-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 20px;
+}
+.sender-options .anon-check-wrapper {
+    flex-basis: 40%;
+    display: flex;
+    align-items: center;
+}
+.sender-options .anon-check-wrapper label {
+    margin: 0 0 0 8px;
+}
+.sender-options #sender-name-wrapper {
+    flex-basis: 60%;
+    display: none; /* Disembunyikan oleh JS awalnya */
+}
+.sender-options #sender-name-wrapper label {
+    margin: 0;
+}
+
+/* Tombol Kirim */
+#confess-form button {
+    background-color: #4a90e2;
+    color: white;
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+}
+#confess-form button:hover {
+    background-color: #357ABD;
+}
+
+/* Penataan Feed */
+.feed-container {
+    padding: 30px;
+}
+.feed-container h2 {
+    margin-top: 0;
+}
+
+/* --- STYLE BARU UNTUK SORTING --- */
+.sort-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+.sort-btn {
+    padding: 8px 15px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #555;
+    background-color: #f0f2f5;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+.sort-btn:hover {
+    background-color: #e0e0e0;
+}
+.sort-btn.active {
+    background-color: #4a90e2;
+    color: white;
+}
+
+/* --- PERUBAHAN PADA POST CARD --- */
+.post {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    /* Hapus padding dari .post */
+    padding: 0; 
+    position: relative;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.post:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Wrapper link baru di dalam .post */
+.post-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    /* Pindahkan padding dari .post ke .post-link */
+    padding: 20px;
+}
+
+/* Style untuk Header Postingan */
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 10px;
+}
+.post-sender {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #333;
+}
+.post-category {
+    font-size: 0.85em;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: white;
+    background-color: #888; /* Default */
+    text-transform: capitalize;
+}
+
+/* Pewarnaan Kategori */
+.category-cinta { background-color: #e91e63; }
+.category-lucu { background-color: #ffc107; color: #333; }
+.category-sedih { background-color: #03a9f4; }
+.category-aneh { background-color: #9c27b0; }
+.category-jomok { background-color: #4caf50; }
+.category-lesbiola { background-color: #f44336; }
+.category-lainnya { background-color: #607d8b; }
+
+/* Style untuk Teks */
+.post-text {
+    margin: 10px 0 10px 0;
+    font-size: 1.05em;
+    line-height: 1.6;
+    word-wrap: break-word;
+    white-space: pre-wrap; 
+}
+.post-text.truncated {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* Batasi hingga 5 baris */
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+.read-more-link {
+    display: block;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #4a90e2;
+    margin-top: 5px;
+}
+
+/* --- STYLE BARU UNTUK FOOTER & LIKE --- */
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px; /* Padding terpisah untuk footer */
+    border-top: 1px solid #e9e9e9;
+    background-color: #fafafa;
+}
+.post-time {
+    font-size: 0.85em;
+    color: #888;
+}
+.like-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.like-btn {
+    background: #f0f2f5;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s ease;
+}
+.like-btn:hover {
+    background-color: #e9e9e9;
+}
+.like-btn:active {
+    transform: scale(0.9);
+}
+.like-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.like-count {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #555;
+}
+
+/* --- STYLE UNTUK HALAMAN DETAIL --- */
+
+/* Kontainer untuk tombol kembali */
+.back-link-container {
+    padding: 0 30px 20px 30px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.back-link {
+    font-weight: bold;
+    color: #4a90e2;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Kontainer untuk detail cerita */
+.story-detail-container {
+    padding: 30px;
+}
+.story-detail-container .post-text {
+    max-height: none;
+    -webkit-line-clamp: unset;
+    overflow: visible;
+    font-size: 1.1em;
+    line-height: 1.7;
+}
+.story-detail-container .post-header {
+    margin-bottom: 20px;
+}
+/* Di halaman detail, footer tidak perlu style khusus */
+.story-detail-container .post-footer {
+    padding: 15px 0 0 0;
+    border-top: none;
+    background-color: transparent;
+}
+.story-detail-container .post-time {
+    margin-top: 0;
+}
+
+
+/* --- STYLE BARU UNTUK ADMIN PANEL --- */
+.admin-controls {
+    background-color: #fffbe6; /* Kuning muda */
+    border-bottom: 2px solid #ffe58f;
+}
+.admin-controls label {
+    margin-top: 10px;
+}
+.admin-controls input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+.admin-controls button {
+    background-color: #ffc107; /* Kuning */
+    color: #333;
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+.admin-controls button:hover {
+    background-color: #e0a800;
+}
+.admin-status-msg {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+/* Style untuk tombol hapus */
+.delete-btn {
+    background-color: #dc3545; /* Merah */
+    color: white;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+    transition: background-color 0.2s;
+}
+.delete-btn:hover {
+    background-color: #c82333;
+}
+.admin-post .post-time {
+    font-size: 0.9em;
+    color: #555;
+    font-weight: bold;
+}

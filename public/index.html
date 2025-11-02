@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Menfess</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>SpillHub</h1>
+            <p>Tuliskan ceritamu di bawah ini.</p>
+        </header>
+
+        <section class="form-container">
+            <h2>Buat Kiriman Baru</h2>
+            <form id="confess-form">
+                
+                <textarea 
+                    id="confess-text" 
+                    rows="6" 
+                    placeholder="Apa yang ada di pikiranmu..."
+                    required
+                ></textarea>
+
+                <label for="category-select">Pilih Kategori:</label>
+                <select id="category-select" required>
+                    <option value="">-- Kategori --</option>
+                    <option value="lucu">Lucu</option>
+                    <option value="aneh">Aneh</option>
+                    <option value="cinta">Cinta</option>
+                    <option value="sedih">Sedih</option>
+                    <option value="jomok">Jomok</option>
+                    <option value="lesbiola">Lesbiola</option>
+                    <option value="lainnya">Lainnya</option>
+                </select>
+
+                <div class="sender-options">
+                    <div class="anon-check-wrapper">
+                        <input type="checkbox" id="anon-check" checked>
+                        <label for="anon-check">Kirim sebagai Anonim</label>
+                    </div>
+                    
+                    <div id="sender-name-wrapper">
+                        <label for="sender-name">Nama Samaran:</label>
+                        <input type="text" id="sender-name" placeholder="Misal: Si Pengagum">
+                    </div>
+                </div>
+
+                <button type="submit">Kirim Pesan</button>
+            </form>
+        </section>
+
+        <section class="feed-container">
+            <h2>Pesan</h2>
+            
+            <div class="sort-controls">
+                <button id="sort-new" class="sort-btn active">Terbaru</button>
+                <button id="sort-popular" class="sort-btn">Populer</button>
+            </div>
+            <div id="posts-feed">
+                <p>Memuat pesan...</p>
+            </div>
+            
+        </section>
+
+    </div>
+
+    <script src="app.js" defer></script>
+
+</body>
+</html>
