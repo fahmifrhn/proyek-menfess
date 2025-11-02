@@ -1,5 +1,3 @@
-// public/admin.js
-
 document.addEventListener("DOMContentLoaded", function() {
     
     // Ambil elemen
@@ -42,7 +40,10 @@ document.addEventListener("DOMContentLoaded", function() {
         // Buat elemen (mirip app.js, tapi dengan tombol HAPUS)
         const postElement = document.createElement("div");
         postElement.classList.add("post", "admin-post");
-        postElement.dataset.id = message.id; // Simpan ID
+        
+        // --- PERUBAHAN 1 DI SINI ---
+        // Kita gunakan '_id' dari MongoDB, bukan 'id'
+        postElement.dataset.id = message._id; 
 
         // Header (Pengirim, Kategori)
         const postHeader = document.createElement("div");
@@ -57,10 +58,13 @@ document.addEventListener("DOMContentLoaded", function() {
         postContent.classList.add("post-text");
         postContent.textContent = message.text;
         
-        // Waktu
+        // Waktu (Tampilkan ID yang benar)
         const postTime = document.createElement("span");
         postTime.classList.add("post-time");
-        postTime.textContent = `ID: ${message.id} | Waktu: ${message.time}`;
+        
+        // --- PERUBAHAN 2 DI SINI ---
+        // Tampilkan '_id' agar kita bisa melihatnya
+        postTime.textContent = `ID: ${message._id} | Waktu: ${message.time}`;
         
         // Tombol Hapus
         const deleteButton = document.createElement("button");
@@ -76,11 +80,11 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             // Konfirmasi sebelum hapus
-            if (!confirm(`Yakin ingin menghapus pesan dengan ID: ${message.id}?`)) {
+            if (!confirm(`Yakin ingin menghapus pesan dengan ID: ${message._id}?`)) {
                 return;
             }
 
-            adminStatus.textContent = `Menghapus pesan ${message.id}...`;
+            adminStatus.textContent = `Menghapus pesan ${message._id}...`;
             adminStatus.style.color = '#333';
 
             try {
@@ -89,7 +93,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        id: message.id,
+                        // --- PERUBAHAN 3 DI SINI ---
+                        // Kirim '_id' sebagai 'id' ke server
+                        id: message._id, 
                         password: currentPassword
                     })
                 });
@@ -102,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // Jika sukses, hapus elemen dari halaman
                 postElement.remove();
-                adminStatus.textContent = `Pesan ${message.id} berhasil dihapus.`;
+                adminStatus.textContent = `Pesan ${message._id} berhasil dihapus.`;
                 
             } catch (error) {
                 console.error('Error:', error);
