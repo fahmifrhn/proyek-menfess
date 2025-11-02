@@ -96,12 +96,10 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // Validasi
         if (messageText.trim() === '' || category === '') {
-            // --- GANTI ALERT ---
             showNotification('Pesan dan kategori harus diisi!', 'error');
             return;
         }
         if (!anonCheck.checked && senderName.trim() === '') {
-            // --- GANTI ALERT ---
             showNotification('Nama samaran harus diisi jika tidak anonim!', 'error');
             return;
         }
@@ -120,7 +118,6 @@ document.addEventListener("DOMContentLoaded", function() {
             
             const newMessage = await response.json();
             
-            // Hapus 'Belum ada pesan' jika ada
             if (postsFeed.querySelector('p')) {
                 postsFeed.innerHTML = "";
             }
@@ -133,13 +130,10 @@ document.addEventListener("DOMContentLoaded", function() {
             anonCheck.checked = true;
             toggleSenderName();
 
-            // --- INI ADALAH NOTIFIKASI SUKSES ANDA ---
             showNotification('Pesan berhasil terkirim!', 'success');
             
         } catch (error) {
              console.error('Error:', error);
-             // --- GANTI ALERT ---
-             // Tampilkan pesan error yang "ramah" dari server
              showNotification(`Terjadi kesalahan: ${error.message}`, 'error');
         }
     });
@@ -148,12 +142,18 @@ document.addEventListener("DOMContentLoaded", function() {
     function addNewPost(message, prepend) {
         const newPost = document.createElement("div");
         newPost.classList.add("post");
-        newPost.dataset.id = message.id; // Simpan ID
+        
+        // --- PERBAIKAN BUG #1 ---
+        // Gunakan '_id' dari MongoDB
+        newPost.dataset.id = message._id; 
         
         // Buat link wrapper untuk navigasi ke halaman detail
         const postLink = document.createElement("a");
         postLink.classList.add("post-link");
-        postLink.href = `/detail.html?id=${message.id}`;
+        
+        // --- PERBAIKAN BUG #2 ---
+        // Gunakan '_id' dari MongoDB untuk link
+        postLink.href = `/detail.html?id=${message._id}`;
         
         // 1. Header (Pengirim & Kategori)
         const postHeader = document.createElement("div");
@@ -211,7 +211,10 @@ document.addEventListener("DOMContentLoaded", function() {
             likeBtn.disabled = true; // Cegah spam klik
 
             try {
-                const response = await fetch(`/api/messages/${message.id}/like`, { method: 'POST' });
+                // --- PERBAIKAN BUG #3 (INI YANG UTAMA) ---
+                // Gunakan '_id' dari MongoDB untuk fetch
+                const response = await fetch(`/api/messages/${message._id}/like`, { method: 'POST' });
+                
                 if (!response.ok) throw new Error('Gagal like');
                 
                 const updatedMessage = await response.json();

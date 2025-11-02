@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     // 2. Dapatkan ID cerita dari URL
     const urlParams = new URLSearchParams(window.location.search);
-    const storyId = urlParams.get('id');
+    // 'storyId' ini sudah berisi _id yang benar (dari link di app.js)
+    const storyId = urlParams.get('id'); 
 
     if (!storyId) {
         storyContainer.innerHTML = "<p>Error: ID cerita tidak ditemukan.</p>";
@@ -14,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     // 3. Panggil API untuk mengambil data satu cerita
     try {
+        // Panggil API menggunakan _id
         const response = await fetch(`/api/messages/${storyId}`);
         
         if (!response.ok) {
@@ -35,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         storyContainer.innerHTML = `<p>Gagal memuat cerita: ${error.message}</p>`;
     }
 
-    // 5. Fungsi untuk merender HTML cerita (DIPERBARUI DENGAN LIKE)
+    // 5. Fungsi untuk merender HTML cerita
     function renderStory(message) {
         // Kosongkan kontainer "Memuat..."
         storyContainer.innerHTML = "";
@@ -78,11 +80,14 @@ document.addEventListener("DOMContentLoaded", async function() {
         likeContainer.appendChild(likeBtn);
         likeContainer.appendChild(likeCount);
         
-        // Event listener untuk Tombol LIKE (sama seperti di app.js)
+        // Event listener untuk Tombol LIKE
         likeBtn.addEventListener('click', async (e) => {
             likeBtn.disabled = true; // Cegah spam klik
             try {
-                const response = await fetch(`/api/messages/${storyId}/like`, { method: 'POST' });
+                // --- PERBAIKAN BUG DI SINI ---
+                // Gunakan 'storyId' dari URL (yang merupakan _id yang benar)
+                const response = await fetch(`/api/messages/${storyId}/like`, { method: 'POST' }); 
+                
                 if (!response.ok) throw new Error('Gagal like');
                 
                 const updatedMessage = await response.json();
@@ -90,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                 likeCount.textContent = `${updatedMessage.likes} Suka`;
             } catch (error) {
                 console.error('Error liking post:', error);
-                alert('Gagal menyukai postingan.');
+                alert('Gagal menyukai postingan.'); // Tampilkan alert di halaman detail
             } finally {
                 likeBtn.disabled = false; // Aktifkan kembali tombol
             }
