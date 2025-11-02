@@ -359,3 +359,41 @@ header p { margin: 5px 0 0; opacity: 0.9; }
     color: #555;
     font-weight: bold;
 }
+#notification-bar {
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    
+    /* Sembunyikan secara default */
+    display: none; 
+
+    /* Tetapkan warna */
+    background-color: #888; /* Default */
+    
+    /* Animasi muncul */
+    transition: opacity 0.5s ease;
+}
+
+/* Warna untuk notifikasi sukses */
+#notification-bar.success {
+    background-color: #28a745; /* Hijau */
+    display: block;
+    opacity: 1;
+}
+
+/* Warna untuk notifikasi error */
+#notification-bar.error {
+    background-color: #dc3545; /* Merah */
+    display: block;
+    opacity: 1;
+}
+
+/* Kelas untuk menyembunyikan (digunakan oleh JS) */
+#notification-bar.hidden {
+    opacity: 0;
+    display: none;
+}
+

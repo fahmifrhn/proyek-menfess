@@ -2,18 +2,26 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>Halaman Menfess</title>
+    <!-- Tautkan ke file CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
+
+        <!-- --- TAMBAHKAN ELEMEN INI --- -->
+        <!-- Tempat notifikasi akan muncul -->
+        <div id="notification-bar"></div>
+        <!-- ---------------------------- -->
+
         <header>
-            <h1>SpillHub</h1>
-            <p>Tuliskan ceritamu di bawah ini.</p>
+            <h1>Situs Menfess/Confess</h1>
+            <p>Tuliskan pesan rahasiamu di bawah ini.</p>
         </header>
 
+        <!-- Formulir Kirim Cerita (SAMA) -->
         <section class="form-container">
             <h2>Buat Kiriman Baru</h2>
             <form id="confess-form">
@@ -53,6 +61,7 @@
             </form>
         </section>
 
+        <!-- Area Tampilan Cerita (Feed) (SAMA) -->
         <section class="feed-container">
             <h2>Pesan</h2>
             
@@ -60,6 +69,7 @@
                 <button id="sort-new" class="sort-btn active">Terbaru</button>
                 <button id="sort-popular" class="sort-btn">Populer</button>
             </div>
+
             <div id="posts-feed">
                 <p>Memuat pesan...</p>
             </div>
@@ -68,7 +78,9 @@
 
     </div>
 
+    <!-- Tautkan ke file JavaScript Beranda -->
     <script src="app.js" defer></script>
 
 </body>
 </html>
+

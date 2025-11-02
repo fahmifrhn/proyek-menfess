@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    // Elemen Form (SAMA)
+    // --- Elemen yang dipilih ---
     const confessForm = document.getElementById("confess-form");
     const confessText = document.getElementById("confess-text");
     const postsFeed = document.getElementById("posts-feed");
@@ -8,13 +8,32 @@ document.addEventListener("DOMContentLoaded", function() {
     const anonCheck = document.getElementById("anon-check");
     const senderNameInput = document.getElementById("sender-name");
     const senderNameWrapper = document.getElementById("sender-name-wrapper");
-    
-    // --- ELEMEN SORTING BARU ---
     const sortNewBtn = document.getElementById("sort-new");
     const sortPopularBtn = document.getElementById("sort-popular");
     let currentSort = 'new'; // Default sort
+    
+    // --- ELEMEN BARU UNTUK NOTIFIKASI ---
+    const notificationBar = document.getElementById("notification-bar");
+    let notificationTimeout; // Variabel untuk menyimpan timer
 
-    // Interaktivitas Form (SAMA)
+    // --- FUNGSI BARU UNTUK MENAMPILKAN NOTIFIKASI ---
+    function showNotification(message, type = 'error') {
+        // Hapus timer sebelumnya jika ada (mencegah tumpang tindih)
+        if (notificationTimeout) {
+            clearTimeout(notificationTimeout);
+        }
+
+        // Set pesan dan kelas (tipe)
+        notificationBar.textContent = message;
+        notificationBar.className = type; // 'success' atau 'error'
+
+        // Sembunyikan notifikasi setelah 3 detik
+        notificationTimeout = setTimeout(() => {
+            notificationBar.className = "hidden"; // Sembunyikan dengan mulus
+        }, 3000);
+    }
+    
+    // --- Interaktivitas Form (SAMA) ---
     function toggleSenderName() { 
         if (anonCheck.checked) {
             senderNameWrapper.style.display = 'none';
@@ -28,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
     anonCheck.addEventListener('change', toggleSenderName);
     toggleSenderName();
 
-    // --- EVENT LISTENER SORTING BARU ---
+    // --- EVENT LISTENER SORTING ---
     sortNewBtn.addEventListener('click', () => {
         if (currentSort === 'new') return; // Jangan lakukan apa-apa jika sudah aktif
         currentSort = 'new';
@@ -45,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
         loadMessages(currentSort);
     });
 
-    // --- 1. MEMUAT PESAN (DIPERBARUI) ---
+    // --- 1. MEMUAT PESAN ---
     async function loadMessages(sort = 'new') {
         try {
             // Tambahkan query parameter 'sort'
@@ -53,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (!response.ok) throw new Error('Gagal mengambil data');
             
             const messages = await response.json();
-            postsFeed.innerHTML = ""; 
+            postsFeed.innerHTML = ""; // Kosongkan feed
 
             if (messages.length === 0) {
                 postsFeed.innerHTML = "<p>Belum ada pesan. Jadilah yang pertama!</p>";
@@ -68,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // --- 2. MENGIRIM PESAN (SAMA) ---
+    // --- 2. MENGIRIM PESAN (DIPERBARUI DENGAN NOTIFIKASI) ---
     confessForm.addEventListener("submit", async function(event) {
         event.preventDefault(); 
         const messageText = confessText.value;
@@ -77,11 +96,13 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // Validasi
         if (messageText.trim() === '' || category === '') {
-            alert('Pesan dan kategori harus diisi!');
+            // --- GANTI ALERT ---
+            showNotification('Pesan dan kategori harus diisi!', 'error');
             return;
         }
         if (!anonCheck.checked && senderName.trim() === '') {
-            alert('Nama samaran harus diisi jika tidak anonim!');
+            // --- GANTI ALERT ---
+            showNotification('Nama samaran harus diisi jika tidak anonim!', 'error');
             return;
         }
 
@@ -99,6 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
             const newMessage = await response.json();
             
+            // Hapus 'Belum ada pesan' jika ada
             if (postsFeed.querySelector('p')) {
                 postsFeed.innerHTML = "";
             }
@@ -110,17 +132,23 @@ document.addEventListener("DOMContentLoaded", function() {
             categorySelect.value = "";
             anonCheck.checked = true;
             toggleSenderName();
+
+            // --- INI ADALAH NOTIFIKASI SUKSES ANDA ---
+            showNotification('Pesan berhasil terkirim!', 'success');
+            
         } catch (error) {
              console.error('Error:', error);
-            alert(`Terjadi kesalahan: ${error.message}`);
+             // --- GANTI ALERT ---
+             // Tampilkan pesan error yang "ramah" dari server
+             showNotification(`Terjadi kesalahan: ${error.message}`, 'error');
         }
     });
 
-    // --- 3. FUNGSI MENAMPILKAN POST (DIPERBARUI) ---
+    // --- 3. FUNGSI MENAMPILKAN POST ---
     function addNewPost(message, prepend) {
         const newPost = document.createElement("div");
         newPost.classList.add("post");
-        newPost.dataset.id = message.id;
+        newPost.dataset.id = message.id; // Simpan ID
         
         // Buat link wrapper untuk navigasi ke halaman detail
         const postLink = document.createElement("a");
@@ -134,15 +162,14 @@ document.addEventListener("DOMContentLoaded", function() {
             <span class="post-sender">${message.sender}</span>
             <span class="post-category category-${message.category}">${message.category}</span>
         `;
-        postLink.appendChild(postHeader);
+        postLink.appendChild(postHeader); // Masukkan header ke link
 
         // 2. Konten Teks
         const postContent = document.createElement("p");
         postContent.classList.add("post-text");
         postContent.textContent = message.text;
         
-        // Logika "Read More"
-        const MAX_CHAR_LIMIT = 400;
+        const MAX_CHAR_LIMIT = 400; // Batas karakter untuk "lihat lebih banyak"
         if (message.text.length > MAX_CHAR_LIMIT) {
             postContent.classList.add("truncated");
             // Buat 'read more' sebagai bagian dari link
@@ -151,13 +178,12 @@ document.addEventListener("DOMContentLoaded", function() {
             readMoreLink.textContent = "Lihat lebih banyak";
             postContent.appendChild(readMoreLink);
         }
-        postLink.appendChild(postContent);
+        postLink.appendChild(postContent); // Masukkan konten ke link
         
         // Tambahkan link ke post
         newPost.appendChild(postLink);
         
-        // 3. Buat Footer (Waktu & Like)
-        // Ini DILUAR <a> tag, jadi tidak akan memicu navigasi
+        // 3. Buat Footer (Waktu & Like) - Ini di LUAR link
         const postFooter = document.createElement("div");
         postFooter.classList.add("post-footer");
 
@@ -181,8 +207,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // Event listener untuk Tombol LIKE
         likeBtn.addEventListener('click', async (e) => {
-            // Kita tidak perlu e.stopPropagation() karena tombol ini
-            // sudah berada di luar tag <a>
+            // Kita tidak perlu stopPropagation() karena tombol ini DI LUAR link <a>
             likeBtn.disabled = true; // Cegah spam klik
 
             try {
@@ -194,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 likeCount.textContent = `${updatedMessage.likes} Suka`;
             } catch (error) {
                 console.error('Error liking post:', error);
-                alert('Gagal menyukai postingan.');
+                // Biarkan error 'like' tidak menampilkan notifikasi agar tidak mengganggu
             } finally {
                 likeBtn.disabled = false; // Aktifkan kembali tombol
             }
@@ -202,17 +227,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
         postFooter.appendChild(postTime);
         postFooter.appendChild(likeContainer);
-        newPost.appendChild(postFooter);
+        newPost.appendChild(postFooter); // Tambahkan footer ke post
 
         // 4. Tambahkan ke DOM
         if (prepend) {
-            postsFeed.prepend(newPost);
+            postsFeed.prepend(newPost); // Tambah di atas
         } else {
-            postsFeed.append(newPost);
+            postsFeed.append(newPost); // Tambah di bawah
         }
     }
 
-    // Panggil fungsi untuk memuat pesan saat halaman pertama kali dibuka
+    // Panggil fungsi untuk memuat pesan saat halaman dibuka
     loadMessages(currentSort);
 });
 

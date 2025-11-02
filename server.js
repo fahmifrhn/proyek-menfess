@@ -7,7 +7,7 @@ const mongoose = require('mongoose'); // Impor Mongoose
 require('dotenv').config(); // Muat variabel dari .env
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Siap untuk Render
+const PORT = process.env.PORT || 3000; // Siap untuk Render/Railway
 
 // Ambil URL DB dari file .env
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -40,11 +40,8 @@ const messageSchema = new mongoose.Schema({
     sender: String,
     time: String,
     likes: { type: Number, default: 0 },
-    // Mongoose otomatis menambahkan _id sebagai ID unik
-    // dan createdAt/updatedAt jika kita tambahkan { timestamps: true }
 });
 
-// Buat "Model" dari skema. Ini adalah cara kita berinteraksi dengan koleksi.
 const Message = mongoose.model('Message', messageSchema);
 
 // ---------------------------------------------
@@ -54,7 +51,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ---------------------------------------------
-// 5. API Endpoints (DIGANTI DENGAN MONGOOSE)
+// 5. API Endpoints
 // ---------------------------------------------
 
 // GET /api/messages (MENGAMBIL SEMUA PESAN)
@@ -91,7 +88,7 @@ app.get('/api/messages/:id', async (req, res) => {
     }
 });
 
-// POST /api/messages (MEMBUAT PESAN BARU)
+// POST /api/messages (MEMBUAT PESAN BARU - DIPERBARUI)
 app.post('/api/messages', async (req, res) => {
     try {
         const { text, category, sender } = req.body;
@@ -102,16 +99,19 @@ app.post('/api/messages', async (req, res) => {
         const filteredText = filterText(text);
         const finalSender = (sender && sender.trim() !== '') ? filterText(sender) : "Anonim";
 
-        // Buat instance baru dari Model Pesan
         const newMessage = new Message({
             text: filteredText,
             category: category,
             sender: finalSender,
-            time: new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }),
+            // --- PERBAIKAN TIMEZONE DI SINI ---
+            time: new Date().toLocaleString('id-ID', { 
+                dateStyle: 'medium', 
+                timeStyle: 'short', 
+                timeZone: 'Asia/Jakarta' // Paksa ke GMT+7
+            }),
             likes: 0
         });
 
-        // Simpan ke database
         await newMessage.save();
         res.status(201).json(newMessage);
 
@@ -126,8 +126,8 @@ app.post('/api/messages/:id/like', async (req, res) => {
     try {
         const updatedMessage = await Message.findByIdAndUpdate(
             req.params.id,
-            { $inc: { likes: 1 } }, // $inc adalah cara aman (atomic) untuk menambah angka
-            { new: true } // Opsi ini mengembalikan dokumen yang *sudah* diupdate
+            { $inc: { likes: 1 } }, 
+            { new: true } 
         );
 
         if (!updatedMessage) {
@@ -169,3 +169,4 @@ app.post('/api/admin/delete', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server berjalan di http://localhost:${PORT}`);
 });
+
